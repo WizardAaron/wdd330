@@ -1,3 +1,5 @@
+import { renderListWithTemplate } from './utils.mjs';
+
 function productCardTemplate(product) {
   return `
   <li class="product-card">
@@ -20,20 +22,18 @@ export default class ProductList {
   }
 
   async init() {
-    // Load all products
     const allProducts = await this.dataSource.getData();
-    
-    // Filter by category
     this.products = allProducts.filter(item => item.Category === this.category);
-    
-    // Render the filtered list
     this.renderList(this.products);
   }
 
-  // NEW: renderList takes a product list argument
   renderList(productList) {
-    this.listElement.innerHTML = productList
-      .map(product => productCardTemplate(product))
-      .join("");
+    renderListWithTemplate(
+      productCardTemplate,  // the template function
+      this.listElement,     // container element
+      productList,          // list of products
+      "afterbegin",         // position (default)
+      true                  // clear container before adding
+    );
   }
 }

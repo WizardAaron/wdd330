@@ -54,3 +54,12 @@ export async function loadHeaderFooter() {
   renderWithTemplate(headerTemplate, headerElement);
   renderWithTemplate(footerTemplate, footerElement);
 }
+
+export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
+  if (clear) {
+    parentElement.innerHTML = ""; // clear the container if requested
+  }
+
+  const htmlStrings = list.map(templateFn).join("");
+  parentElement.insertAdjacentHTML(position, htmlStrings);
+}
