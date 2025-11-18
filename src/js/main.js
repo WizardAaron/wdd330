@@ -2,16 +2,19 @@
 // This file handles the homepage functionality
 
 import ProductData from "./ProductData.mjs";
-import { loadHeaderFooter } from "./utils.mjs";
-
-// Load header and footer if they exist
-// loadHeaderFooter();
+import ProductList from "./ProductList.mjs";
+import { qs } from "./utils.mjs";
 
 // Initialize product data
 const productData = new ProductData("tents");
 
-// Optional: Add any homepage-specific functionality here
-console.log("Sleep Outside homepage loaded successfully");
+// Get the product list element from the page
+const productListElement = qs(".product-list");
 
-// Example: You could add featured product loading, search functionality, etc.
-// For now, the homepage is static content from index.html
+// Create an instance of ProductList
+const productList = new ProductList("tents", productData, productListElement);
+
+// Initialize the product list (this will fetch and display the products)
+productList.init();
+
+console.log("Sleep Outside homepage loaded successfully");
