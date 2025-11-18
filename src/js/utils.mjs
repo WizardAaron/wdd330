@@ -44,6 +44,16 @@ export async function loadTemplate(path) {
   return template;
 }
 
+// render a list of items using a template function
+export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
+  const htmlStrings = list.map(template);
+  // if clear is true we need to clear out the contents of the parent.
+  if (clear) {
+    parentElement.innerHTML = "";
+  }
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+}
+
 // load header and footer
 export async function loadHeaderFooter() {
   const headerTemplate = await loadTemplate("../partials/header.html");
