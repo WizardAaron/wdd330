@@ -1,4 +1,4 @@
-import { getLocalStorage } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage } from "./utils.mjs";
 import { loadHeaderFooter } from "./utils.mjs";
 
 function renderCartContents() {
@@ -26,6 +26,9 @@ function renderCartContents() {
 
   // Insert total HTML
   cartTotalText.innerHTML = `Total: $${total.toFixed(2)}`;
+
+  // Attach remove listeners to all remove buttons
+  attachRemoveListeners();
 }
 
 function cartItemTemplate(item) {
@@ -40,8 +43,33 @@ function cartItemTemplate(item) {
       <p class="cart-card__color">${item.Colors[0].ColorName}</p>
       <p class="cart-card__quantity">qty: 1</p>
       <p class="cart-card__price">$${item.FinalPrice}</p>
+      <span class="cart-card__remove" data-id="${item.Id}">✖</span>
     </li>
   `;
+}
+
+function attachRemoveListeners() {
+  const removeButtons = document.querySelectorAll(".cart-card__remove");
+  removeButtons.forEach((button) => {
+    button.addEventListener("click", removeFromCart);
+  });
+}
+
+function removeFromCart(event) {
+  // Get the product ID from the data-id attribute
+  const productId = event.target.getAttribute("data-id");
+  
+  // Get current cart items from localStorage
+  let cartItems = getLocalStorage("so-cart") || [];
+  
+  // Filter out the item with the matching ID
+  cartItems = cartItems.filter((item) => item.Id !== productId);
+  
+  // Save updated cart back to localStorage
+  setLocalStorage("so-cart", cartItems);
+  
+  // Re-render the cart
+  renderCartContents();
 }
 
 renderCartContents();
