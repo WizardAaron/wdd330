@@ -10,7 +10,7 @@ const productData = new ProductData("tents");
 
 // Get the product list element from the page
 const productListElement = qs(".product-list");
-z   
+z;
 // Create an instance of ProductList
 const productList = new ProductList("tents", productData, productListElement);
 
