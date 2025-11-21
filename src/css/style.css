@@ -169,7 +169,11 @@ button {
 }
 
 /* Cart items display as full-width column */
-.products .product-list {
+.cart-card {
+  width: 100%;
+}
+
+ul:has(.cart-card) {
   flex-direction: column;
   align-items: stretch;
 }
