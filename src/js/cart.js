@@ -22,7 +22,7 @@ function renderCartContents() {
   cartFooter.classList.remove("hide");
 
   // Calculate total
-  const total = cartItems.reduce((sum, item) => sum + Number(item.FinalPrice), 0);
+  const total = cartItems.reduce((sum, item) => sum + Number(item.totalPrice), 0);
 
   // Insert total HTML
   cartTotalText.innerHTML = `Total: $${total.toFixed(2)}`;
@@ -41,8 +41,8 @@ function cartItemTemplate(item) {
         <h2 class="card__name">${item.Name}</h2>
       </a>
       <p class="cart-card__color">${item.Colors[0].ColorName}</p>
-      <p class="cart-card__quantity">qty: 1</p>
-      <p class="cart-card__price">$${item.FinalPrice}</p>
+      <p class="cart-card__quantity">qty: ${item.quantity}</p>
+      <p class="cart-card__price">$${item.totalPrice.toFixed(2)}</p>
       <span class="cart-card__remove" data-id="${item.Id}">✖</span>
     </li>
   `;

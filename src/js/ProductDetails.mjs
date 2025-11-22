@@ -29,11 +29,30 @@ export default class ProductDetails {
 
   addProductToCart(product) {
     let cartItems = getLocalStorage("so-cart") || [];
-    cartItems.push(product);
-    setLocalStorage("so-cart", cartItems);
+
+  // Check if item already exists in cart
+  let existingItem = cartItems.find((item) => item.Id === product.Id);
+
+  if (existingItem) {
+    // Increment quantity
+    existingItem.quantity = (existingItem.quantity || 1) + 1;
     
-    // Show user feedback
-    this.showAddToCartFeedback();
+    // Update item total price
+    existingItem.totalPrice =
+      existingItem.quantity * Number(existingItem.FinalPrice);
+  } else {
+    // If new item → add quantity & totalPrice fields
+    product.quantity = 1;
+    product.totalPrice = Number(product.FinalPrice);
+    cartItems.push(product);
+  }
+
+  // Save updated cart
+  setLocalStorage("so-cart", cartItems);
+
+  // Show feedback
+  this.showAddToCartFeedback();
+
   }
 
   addToCartListener() {
