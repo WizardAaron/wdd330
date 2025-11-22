@@ -97,7 +97,7 @@ export default class ProductDetails {
       // Render product image
       const imageElement = qs("#productImage") || qs(".product-detail img");
       if (imageElement) {
-        imageElement.src = this.product.Image;
+        imageElement.src = this.product.Images.PrimaryLarge;
         imageElement.alt = this.product.Name;
       }
       
