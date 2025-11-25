@@ -56,14 +56,25 @@
           <input type="text" id="security-code" name="security-code" required />
         </fieldset>
 
-        <button type="submit">Checkout</button>
+        <fieldset class="checkout-summary">
+          <legend>Order Summary</legend>
+        
+          <div class="order__summary">
+            <div>Items</div>
+            <div id="num-items"></div>
+            <div>Subtotal</div>
+            <div id="cartTotal"></div>
+            <div>Tax</div>
+            <div id="tax"></div>
+            <div>Shipping</div>
+            <div id="shipping"></div>
+            <div>Total</div>
+            <div id="orderTotal"></div>
+          </div>
+        </fieldset>
+        
+        <button type="submit" id="checkoutSubmit">Checkout</button>
       </form>
-
-      <section class="order-summary">
-        <h2>Order Summary</h2>
-        <ul class="order-product-list">
-          <!-- Order items (js) will be dynamically inserted here -->
-        </ul>
     </main>
 
     <footer id="main-footer">
