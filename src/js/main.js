@@ -5,8 +5,13 @@ import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
 import { qs } from "./utils.mjs";
 import { loadHeaderFooter } from "./utils.mjs";
+import Alert from "./Alert.mjs";  // <-- NEW IMPORT
 
 loadHeaderFooter();
+
+// Initialize alerts
+const alertSystem = new Alert('./json/alert.json'); // path to your alerts.json
+alertSystem.loadAlerts();
 
 // Initialize product data
 const productData = new ProductData("tents");
