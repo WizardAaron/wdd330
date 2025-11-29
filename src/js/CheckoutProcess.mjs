@@ -38,24 +38,27 @@ export default class CheckoutProcess {
     }
 
     init() {
-        this.list = getLocalStorage(this.key);
-        this.calculateItemSummary();
+        this.list = getLocalStorage(this.key) || [];
+        if (this.list.length > 0) {
+            this.calculateItemSummary();
+            this.calculateOrderTotal();
+        }
     }
 
-    calculateItemSubTotal() {
+    calculateItemSummary() {
         // calculate and display the total dollar amount of the items in the cart, and the number of items.
-        const summaryElement = document.querySelector(
-            this.outputSelector + " .item-subtotal"
-        );
-
-        const itemCount = document.querySelector(
-            this.outputSelector + " .item-count"
-        );
-        itemCount.innerText = this.list.length;
+        const itemCount = document.querySelector("#num-items");
+        if (itemCount) {
+            itemCount.innerText = this.list.length;
+        }
 
         const amounts = this.list.map((item) => item.FinalPrice);
-        this.itemTotal = amounts.reduce((sum, item) => sum + item);
-        summaryElement.innerText = `$${this.itemTotal}`;;
+        this.itemTotal = amounts.reduce((sum, item) => sum + item, 0);
+        
+        const cartTotal = document.querySelector("#cartTotal");
+        if (cartTotal) {
+            cartTotal.innerText = `$${this.itemTotal.toFixed(2)}`;
+        }
     }
 
     calculateOrderTotal() {
@@ -74,18 +77,24 @@ export default class CheckoutProcess {
 
     displayOrderTotals() {
         // once the totals are all calculated display them in the order summary page
-        const tax = document.querySelector(`${this.outputSelector} #tax`);
-        tax.innerText = `$${this.tax.toFixed(2)}`;
+        const tax = document.querySelector("#tax");
+        if (tax) {
+            tax.innerText = `$${this.tax.toFixed(2)}`;
+        }
 
-        const shipping = document.querySelector(`${this.outputSelector} #shipping`);
-        shipping.innerText = `$${this.tax.toFixed(2)}`;
+        const shipping = document.querySelector("#shipping");
+        if (shipping) {
+            shipping.innerText = `$${this.shipping.toFixed(2)}`;
+        }
 
-        const orderTotal = document.querySelector(`${this.outputSelector} #orderTotal`);
-        orderTotal.innerText = `$${this.tax.toFixed(2)}`;
+        const orderTotal = document.querySelector("#orderTotal");
+        if (orderTotal) {
+            orderTotal.innerText = `$${this.orderTotal.toFixed(2)}`;
+        }
     }
 
     async checkout() {
-        const formElement = document.forms["checkout"];
+        const formElement = document.getElementById("checkout-form");
         const order = formDataToJSON(formElement);
 
         order.orderDate = new Date().toISOString();
@@ -93,13 +102,15 @@ export default class CheckoutProcess {
         order.tax = this.tax;
         order.shipping = this.shipping;
         order.items = packageItems(this.list);
-        //console.log(order);
+        console.log("Order being sent:", order);
 
         try {
             const response = await services.checkout(order);
-            console.log(response);
+            console.log("Order successful:", response);
+            alert("Order placed successfully! Order ID: " + response.orderId);
         } catch (err) {
-            console.log(err);
+            console.log("Order failed:", err);
+            alert("Order failed. Please check the console for details.");
         }
     }
 
