@@ -1,7 +1,7 @@
 // Product listing page functionality
 // This file handles displaying the product list
 
-import ProductData from "./ProductData.mjs";
+import ExternalServices from "./ExternalServices.mjs";
 import ProductList from "./ProductList.mjs";
 import { loadHeaderFooter, getParam } from "./utils.mjs";
 
@@ -30,8 +30,8 @@ function updateTitle(category, searchTerm) {
 // Update the title
 updateTitle(category, searchTerm);
 
-// first create an instance of the ProductData class.
-const dataSource = new ProductData();
+// first create an instance of the ExternalServices class.
+const dataSource = new ExternalServices();
 // then get the element you want the product list to render in
 const listElement = document.querySelector(".product-list");
 

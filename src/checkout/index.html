@@ -20,6 +20,61 @@
       <section class="products">
         <h2>Review & Place your Order</h2>
       </section>
+
+      <form id="checkout-form">
+        <fieldset>
+          <legend>Shipping Information</legend>
+
+          <label for="fname">First Name:</label>
+          <input type="text" id="fname" name="fname" required />
+          <label for="lname">Last Name:</label>
+          <input type="text" id="lname" name="lname" required />
+
+          <label for="street">Address:</label>
+          <input type="text" id="street" name="street" required />
+
+          <label for="city">City:</label>
+          <input type="text" id="city" name="city" required />
+
+          <label for="state">State/Province:</label>
+          <input type="text" id="state" name="state" required />
+
+          <label for="zip">ZIP/Postal Code:</label>
+          <input type="text" id="zip" name="zip" required />
+        </fieldset>
+
+        <fieldset>
+          <legend>Payment Information</legend>
+
+          <label for="cardNumber">Card Number:</label>
+          <input type="text" id="cardNumber" name="cardNumber" required />
+
+          <label for="expiration">Expiration Date:</label>
+          <input type="text" id="expiration" name="expiration" required />
+
+          <label for="code">Security Code:</label>
+          <input type="text" id="code" name="code" required />
+        </fieldset>
+
+        <fieldset class="checkout-summary">
+          <legend>Order Summary</legend>
+        
+          <div class="order__summary">
+            <div>Items</div>
+            <div id="num-items"></div>
+            <div>Subtotal</div>
+            <div id="cartTotal"></div>
+            <div>Tax</div>
+            <div id="tax"></div>
+            <div>Shipping</div>
+            <div id="shipping"></div>
+            <div>Total</div>
+            <div id="orderTotal"></div>
+          </div>
+        </fieldset>
+        
+        <button type="submit" id="checkoutSubmit">Checkout</button>
+      </form>
     </main>
 
     <footer id="main-footer">
