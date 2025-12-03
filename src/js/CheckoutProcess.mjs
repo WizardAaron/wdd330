@@ -1,4 +1,4 @@
-import { getLocalStorage } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, alertMessage } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 
 const services = new ExternalServices();
@@ -97,6 +97,12 @@ export default class CheckoutProcess {
         const formElement = document.getElementById("checkout-form");
         const order = formDataToJSON(formElement);
 
+        // Convert expiration date from YYYY-MM to MM/YYYY format
+        if (order.expiration && order.expiration.includes('-')) {
+            const [year, month] = order.expiration.split('-');
+            order.expiration = `${month}/${year}`;
+        }
+
         order.orderDate = new Date().toISOString();
         order.orderTotal = this.orderTotal;
         order.tax = this.tax;
@@ -107,10 +113,39 @@ export default class CheckoutProcess {
         try {
             const response = await services.checkout(order);
             console.log("Order successful:", response);
-            alert("Order placed successfully! Order ID: " + response.orderId);
+            // Clear the cart
+            setLocalStorage("so-cart", []);
+            // Redirect to success page
+            window.location = "success.html";
         } catch (err) {
             console.log("Order failed:", err);
-            alert("Order failed. Please check the console for details.");
+            // Display detailed error message from API
+            let errorMessage = "There was an error processing your order.";
+            
+            if (err.name === "servicesError" && err.message) {
+                // Extract error details from API response
+                if (typeof err.message === "string") {
+                    errorMessage = err.message;
+                } else if (err.message.message) {
+                    errorMessage = err.message.message;
+                } else if (typeof err.message === "object") {
+                    // Handle multiple validation errors
+                    const errors = [];
+                    for (const [field, msg] of Object.entries(err.message)) {
+                        errors.push(`${field}: ${msg}`);
+                    }
+                    errorMessage = errors.join('<br>');
+                }
+            } else if (err.message) {
+                errorMessage = err.message;
+            }
+            
+            // Remove any existing alerts
+            const existingAlerts = document.querySelectorAll('.alert');
+            existingAlerts.forEach(alert => alert.remove());
+            
+            // Display error using custom alert
+            alertMessage(errorMessage, true, 'error');
         }
     }
 

@@ -1,4 +1,4 @@
-import { loadHeaderFooter } from "./utils.mjs";
+import { loadHeaderFooter, alertMessage } from "./utils.mjs";
 import CheckoutProcess from "./CheckoutProcess.mjs";
 
 loadHeaderFooter();
@@ -32,15 +32,25 @@ function validatePaymentInfo() {
     // Validate expiration date (must be in the future)
     if (expirationDate) {
         const today = new Date();
-        const expiry = new Date(expirationDate);
+        // Extract year and month from the input format (YYYY-MM)
+        const [year, month] = expirationDate.split('-').map(Number);
+        const expiry = new Date(year, month - 1); // month is 0-indexed
         
-        if (expiry <= today) {
+        // Set both dates to the first of the month for comparison
+        today.setDate(1);
+        today.setHours(0, 0, 0, 0);
+        
+        if (expiry < today) {
             errors.push("Expiration date must be in the future");
         }
     }
     
     if (errors.length > 0) {
-        alert("Payment validation failed:\n\n" + errors.join("\n"));
+        // Remove any existing alerts
+        const existingAlerts = document.querySelectorAll('.alert');
+        existingAlerts.forEach(alert => alert.remove());
+        
+        alertMessage("Payment validation failed:<br><br>" + errors.join("<br>"), true, 'error');
         return false;
     }
     
@@ -50,6 +60,14 @@ function validatePaymentInfo() {
 // listening for click on the button
 document.querySelector("#checkoutSubmit").addEventListener("click", (e) => {
     e.preventDefault();
+
+    const form = document.querySelector("#checkout-form");
+    
+    // Check HTML validation first
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
 
     // Validate payment info before proceeding
     if (validatePaymentInfo()) {
