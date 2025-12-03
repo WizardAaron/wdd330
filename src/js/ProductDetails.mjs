@@ -1,4 +1,4 @@
-import { setLocalStorage, getLocalStorage, qs } from "./utils.mjs";
+import { setLocalStorage, getLocalStorage, qs, alertMessage } from "./utils.mjs";
 
 export default class ProductDetails {
   constructor(productId, dataSource) {
@@ -55,6 +55,13 @@ export default class ProductDetails {
       const originalText = button.textContent;
       button.textContent = "Added to Cart!";
       button.disabled = true;
+      
+      // Remove any existing alerts
+      const existingAlerts = document.querySelectorAll('.alert');
+      existingAlerts.forEach(alert => alert.remove());
+      
+      // Show success alert
+      alertMessage(`${this.product.Name} has been added to your cart!`, false);
       
       setTimeout(() => {
         button.textContent = originalText;
