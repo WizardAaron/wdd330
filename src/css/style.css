@@ -189,10 +189,27 @@ main.divider {
 
 .cart svg {
   width: 25px;
+  transition: transform 0.3s ease;
+  display: inline-block;
 }
 
 .cart:hover svg {
   fill: gray;
+}
+
+/* Backpack animation when item is added to cart */
+@keyframes grow-shake-shrink {
+  0%   { transform: scale(1); }
+  20%  { transform: scale(1.2); }
+  40%  { transform: scale(1.2) rotate(5deg); }
+  50%  { transform: scale(1.2) rotate(-5deg); }
+  60%  { transform: scale(1.2) rotate(5deg); }
+  80%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.cart svg.animate-backpack {
+  animation: grow-shake-shrink 1s ease-in-out;
 }
 
 /* End cart icon styles */
