@@ -63,6 +63,16 @@ export default class ProductDetails {
       // Show success alert
       alertMessage(`${this.product.Name} has been added to your cart!`, false);
       
+      // Trigger backpack animation
+      const cartIcon = document.querySelector('.cart svg');
+      if (cartIcon) {
+        cartIcon.classList.add('animate-backpack');
+        // Remove the class after animation completes so it can be triggered again
+        setTimeout(() => {
+          cartIcon.classList.remove('animate-backpack');
+        }, 1000);
+      }
+      
       setTimeout(() => {
         button.textContent = originalText;
         button.disabled = false;
